@@ -25,13 +25,7 @@ def extractURL_2(line:String):(String) = {
     val pattern(ip:String) = line
     return (ip.toString)
 }
-var URLaccesslogs = logFile.filter(containsURL_2)
-URLaccesslogs.take(10)
-var URLs = URLaccesslogs.map(line => (extractURL_2(line),1));
-URLs.take(10)
-var URLcounts = URLs.reduceByKey((a,b) => (a+b))
-var URLcountsOrdered = URLcounts.sortBy(f => f._2, false);
-URLcountsOrdered.take(10)
+
 	}
 
 val logFile = sc.textFile("/data/spark/project/NASA_access_log_Aug95.gz")
