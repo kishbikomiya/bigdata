@@ -17,6 +17,21 @@ def parseLogLine(log: String):
 			val m = res.get
 			LogRecord(m.group(1), m.group(4),m.group(6), m.group(8).toInt)
 		}
+		def containsURL_2(line:String):Boolean = return line matches "^.+(\"GET.+HTTP.*\").+$"
+//the () is the part that will be extracted
+def extractURL_2(line:String):(String) = {
+    // Here we are using the regular expression for matching the strings with a certain pattern.
+    val pattern = "^.+(\"GET.+HTTP.*\").+$".r
+    val pattern(ip:String) = line
+    return (ip.toString)
+}
+var URLaccesslogs = logFile.filter(containsURL_2)
+URLaccesslogs.take(10)
+var URLs = URLaccesslogs.map(line => (extractURL_2(line),1));
+URLs.take(10)
+var URLcounts = URLs.reduceByKey((a,b) => (a+b))
+var URLcountsOrdered = URLcounts.sortBy(f => f._2, false);
+URLcountsOrdered.take(10)
 	}
 
 val logFile = sc.textFile("/data/spark/project/NASA_access_log_Aug95.gz")
